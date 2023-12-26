@@ -1,0 +1,351 @@
+---
+title: "L03 Data Imports, Joins, Tidy Data"
+subtitle: "Foundations of Data Science with R (STAT 359)"
+author: "YOUR NAME"
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    code-fold: show
+    link-external-newwindow: true
+
+execute:
+  warning: false
+  
+from: markdown+emoji 
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+To link to your github **repo**sitory, appropriately edit the example link below. Meaning replace `https://your-github-repo-url` with your github repo url. Suggest verifying the link works before submitting.
+
+[https://your-github-repo-url](https://your-github-repo-url)
+
+:::
+
+## Overview
+
+The goal of this lab is to briefly cover a variety of topics to allow you to import and work with messy data. 
+
+- Utilize the `readr` package, a member of the `tidyverse`, to load flat files (e.g., `csv` & `txt`) and to gain a better understanding of the basic data structure called a "tibble". Tibbles are data frames, but they tweak some of R's older behaviors to make life a little easier by avoiding unintentional mistakes/errors. The `tibble` package, another member of the `tidyverse`, provides the framework for these opinionated data frames which make working with data in the tidyverse possible.
+
+- Understand the concepts of **relational data**. It is extremely rare that data analyses involve one all-encompassing dataset; we usually want to combine information from multiple data tables/sources to answer interesting questions. The collection of data tables/sources is called **relational data** because it is the relations connecting the datasets together that are important.
+
+- Learn what it means to be a "tidy" dataset and how to tidy messy datasets utilizing the `tidyr` package -- a core member of the `tidyverse`. 
+
+Useful resources:
+
+- [`tibble` package home page](http://tibble.tidyverse.org/index.html).
+- [`readr` package home page](http://readr.tidyverse.org/articles/readr.html)
+- See [two-table verbs in `dplyr`](https://dplyr.tidyverse.org/articles/two-table.html) for more information concerning relational data. 
+- [Relational Database Wikipedia Page](https://en.wikipedia.org/wiki/Relational_database)
+- [`tidyr` package home page](http://tidyr.tidyverse.org/)
+- [pivoting vignette](https://tidyr.tidyverse.org/articles/pivot.html)
+
+**Additionally, you will learn how to ignore files that are too large for version control!**
+
+## Load packages
+
+You should always begin by loading all necessary packages towards the beginning of your document.
+
+```{r}
+#| label: load-pkgs
+#| code-fold: false
+
+# Loading package(s)
+
+```
+
+
+## Datasets 
+
+All datasets are either coded inline, contained in the `data` sub-directory, or found within R packages, which students should be able to identify and download as needed.
+
+The Case Study dataset is stored in the `data` folder and called `users_top7_2020.csv`.
+
+```{r}
+#| label: load-data
+#| code-fold: false
+
+# Load dataset(s)
+
+```
+
+## Exercises: Data Import
+
+### Exercise 1
+
+Demonstrate how to read in `TopBabyNamesByState.txt` contained in the `data` sub-directory using the appropriate function from the `readr` package. After reading in the data, determine the top male and female names in 1984 for South Dakota.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+:::
+
+### Exercise 2
+
+What is the difference between `read.csv()` and `read_csv()`? Which is the appropriate `tidyverse` function to use for importing a comma delimited file?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+:::
+
+### Exercise 3
+
+Practice referring to non-syntactic names in the following data frame by:
+
+```{r}
+#| label: ex-03
+
+# toy dataset
+annoying <- tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+)
+```
+
+a.  Extracting the variable called 1.
+b.  Plotting a scatterplot of 1 vs 2.
+c.  Creating a new column called 3 which is 2 divided by 1.
+d.  Renaming the columns to one, two and three.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+:::
+
+### Exercise 4
+
+What function in `janitor` helps you deal with non-syntactic column names in R and and also ensures column names are systematically handled? Demonstrate its use on the `annoying` dataset above.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+:::
+
+### Exercise 5
+
+Demonstrate how to manually input the data table below into R using each of these functions:
+
+-   `tibble()`
+-   `tribble()`
+
+| price | store   | ounces |
+|-------|---------|--------|
+| 3.99  | target  | 128    |
+| 3.75  | walmart | 128    |
+| 3.00  | amazon  | 128    |
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+:::
+
+
+
+### Exercise 6
+
+::: {.callout-important}
+GitHub (free account) cannot store large files. If you try to commit and push a large dataset you will have an ERROR! Any file over 100 MB (100,000 KB) needs to be added to the `.gitignore` file BEFORE committing.
+
+**We need to do that for this exercise!**
+:::
+
+1. Start by committing and pushing your current work to GitHub! 
+1. Then download the `cc-est2016-alldata.csv` file from Canvas and add it to the `data` subdirectory. **Do not commit!** We need to add the file to the `.gitignore` file first.
+1. **Add `cc-est2016-alldata.csv` to the .gitignore** file. That is, add `data/cc-est2016-alldata.csv` to the file with an appropriate header. If the file has been added (meaning ignored) correctly, it will NOT appear in the Git pane to commit --- may need to refresh the pane. 
+1. Once the file is successfully ignored, commit with the comment "large data ignored!"
+
+Now that you have taken care of the large file issue, read the file in and just print the first 5 observations.
+
+::: {.callout-note collapse=true}
+
+## Oh no, I commited a large file!
+
+If you Commit a large file and try to push to GitHub you will have an issue! Do NOT keep clicking Commit. You **MUST UNDO** the Commit issue before moving forward. The more times you click Commit and generate the error the more Commits you will then need to undo. To undo a Commit, in the Terminal type: `git reset --soft HEAD~1`
+
+To automatically find and add files over 100MB to the .gitignore you can type the following code in the Terminal: 
+
+```{bash}
+#| label: terminal
+#| code-fold: false
+#| eval: false
+
+find . -size +100M | sed 's|^\./||g' | cat >> .gitignore; awk '!NF || !seen[$0]++' .gitignore
+```
+
+Note: You will need to retype this **EVERY** time a new file over 100MB is added to your project.
+:::
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+:::
+
+## Exercises: Joining Data
+
+### Exercise 7 
+
+Describe in your own words what the functions `left_join`, `right_join`, `inner_join`, and `full_join` accomplish.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+
+### Exercise 8
+
+What weather conditions make it more likely to see a departure delay? 
+
+Hint: Join the two appropriate datasets together, then determine how weather impacts departures.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+### Exercise 9
+
+Consider the data sets created below called `data_2022` and `data_2023`. 
+Use `bind_rows()` to combine `data_2022` and `data_2023`.  
+
+When might you use `bind_rows` or `bind_cols` instead of a `join`?
+
+```{r}
+#| label: ex-09
+#| eval: false
+
+# dataset/table
+data_2022 <- tribble(
+  ~year,  ~id,      ~income, ~clients
+  2022,   "x01932",  "$45000",   10,
+  2022,   "x32912",  "$60000",   15,
+  2022,   "x80188",  "$37000",   8
+)
+
+data_2023 <- tribble(
+  ~Year,  ~Id,      ~Income, ~Clients
+  2023,   "x79320",  "$51000",   9,
+  2023,   "x42215",  "$48000",   11,
+  2023,   "x32912",  "$75000",   20
+)
+```
+
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+## Exercises: Tidying Data
+
+### Exercise 10
+
+Tidy the simple tibble of [M&M](https://en.wikipedia.org/wiki/M%26M%27s) data below and drop the NA values.
+
+Do you need to make it wider or longer? What are the variables in your tidy version? What argument drops the NA values?
+
+```{r}
+#| label: ex-10
+#| eval: false
+
+# simple tibble of M&M data
+mm_data <- tribble(
+  ~mm_type, ~blue, ~orange,	~green,	~yellow, ~brown, ~red, ~cyan_blue,
+  "plain",  6,     18,      12,	    6,       7,	     7,    NA,
+  "peanut", NA,	   11,	    9,	    1,	     12,	   8,    15
+)
+```
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+### Exercise 11
+
+Use `table4a` and **only** the `pivot_longer` function to recreate the following (see instructions):
+
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+
+### Exercise 12
+
+What happens if you use `pivot_wider()` on this table so that we have a dataset with 3 columns (`respondent_name`, `age`, `height`) and why? 
+
+Fix the issue by adding a new column.
+
+```{r}
+#| label: ex-12
+#| eval: false
+
+# dataset/table
+people <- tribble(
+  ~respondent_name,  ~key,    ~value,
+  #-----------------|--------|------
+  "Phillip Woods",   "age",       45,
+  "Phillip Woods",   "height",   186,
+  "Phillip Woods",   "age",       50,
+  "Jessica Cordero", "age",       37,
+  "Jessica Cordero", "height",   156
+)
+```
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+## Case Study
+
+Tinder is interested in knowing more about their most active users and have have tasked you with exploring their 7 most active users during 2020. The dataset containing the top 7 active users during 2020 is stored in the `data` folder and called `users_top7_2020.csv`.^[This dataset was sourced from [Swipestats.io](https://www.swipestats.io/).]
+
+The column names contain prefixes "matches", "likes", and "passes" followed by a number; the suffix number represents the month; and the cell represents either the total number of matches (matches), total number of times the user swiped right (likes), or total number of times the user swiped left (passes) during that month (ie: `matches_1` = total number of matches during January 2020).
+
+Complete the following tasks:
+
+a)  Use an appropriate readr function to read in `users_top7_2020.csv`
+
+b)   Is `users_top7_2020.csv` a `tibble` and how do you know? If it isn't, then figure how to turn it into a `tibble`.
+
+c) Use an appropriate graph to visualize the matches, likes, and passes over time for each user. What insights and conclusions can you gain from this graph, if any.
+
+d)   Write out a copy of the tidy dataset to the `data` sub-directory as an RDS file named `users_tidy.rds`. 
+
+e) What is one benefit of saving a dataset as an `rds` compared to a `csv`?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+

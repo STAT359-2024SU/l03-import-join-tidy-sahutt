@@ -55,6 +55,8 @@ You should always begin by loading all necessary packages towards the beginning 
 
 # Loading package(s)
 
+library(tidyverse)
+
 ```
 
 
@@ -81,7 +83,17 @@ Demonstrate how to read in `TopBabyNamesByState.txt` contained in the `data` sub
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+```{r}
+
+top_baby_names <- read_delim("data/TopBabyNamesbyState.txt",
+                             show_col_types = FALSE)
+
+top_baby_names |>
+  filter(state == 'SD', year == 1984) |> 
+  knitr::kable()
+
+```
+
 :::
 
 ### Exercise 2
@@ -91,7 +103,12 @@ What is the difference between `read.csv()` and `read_csv()`? Which is the appro
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+- read.csv() is base R - reads data in as a data frame  
+- read_csv() is from tidyverse - reads data in as a tibble  
+Both functions read in a comma delimited file, but tidyverse will always use an underscore in the function 
+
+A tibble is easier and more consistent to work with, prints to screen in an abbreviated manner, and always outputs a tibble.
+
 :::
 
 ### Exercise 3
@@ -116,7 +133,27 @@ d.  Renaming the columns to one, two and three.
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+```{r}
+#a. 
+annoying[ , 1]
+
+#b.
+annoying |> 
+  ggplot(aes(x = `2`, y = `1`)) +
+  geom_point()
+
+#c.
+annoying |> 
+  mutate('3' = `2`/`1`)
+
+#d. 
+annoying |> 
+  mutate('3' = `2`/`1`) |>  
+  rename( one = `1`, two = `2`, three = '3')
+
+```
+
+
 :::
 
 ### Exercise 4
@@ -126,7 +163,14 @@ What function in `janitor` helps you deal with non-syntactic column names in R a
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+The janitor function that systematically fixes column names is clean_names()
+```{r}
+
+janitor::clean_names(annoying)
+
+```
+
+
 :::
 
 ### Exercise 5
@@ -145,7 +189,21 @@ Demonstrate how to manually input the data table below into R using each of thes
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+```{r}
+
+tibble(
+  price = c(3.99, 3.75, 3.00),
+  store = c("target", "walmart", "amazon"),
+  ounces = c(128, 128, 128))
+
+tribble(
+  ~price, ~store, ~ounces,
+  3.99, "target", 128,
+  3.75, "walmart", 128,
+  3.00, "amazon", 128)
+
+```
+
 :::
 
 

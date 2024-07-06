@@ -8,6 +8,7 @@
 
 # User-specific files
 .Ruserdata
+data/cc-est2016-alldata.csv
 
 # RStudio files
 .Rproj.user/

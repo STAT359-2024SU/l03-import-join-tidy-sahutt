@@ -349,7 +349,7 @@ Do you need to make it wider or longer? What are the variables in your tidy vers
 
 ```{r}
 #| label: ex-10
-#| eval: false
+
 
 # simple tibble of M&M data
 mm_data <- tribble(
@@ -357,12 +357,26 @@ mm_data <- tribble(
   "plain",  6,     18,      12,	    6,       7,	     7,    NA,
   "peanut", NA,	   11,	    9,	    1,	     12,	   8,    15
 )
+
 ```
 
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+
+```{r}
+
+mmtidy <- mm_data |> 
+  pivot_longer(cols = !mm_type, 
+               names_to = "color",
+               values_to = "count",
+               values_drop_na = TRUE) |> 
+  knitr::kable()
+
+mmtidy
+
+```
+
 
 :::
 
@@ -374,7 +388,16 @@ Use `table4a` and **only** the `pivot_longer` function to recreate the following
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+
+```{r}
+tidy_table4a <- table4a |> 
+  pivot_longer(cols = !country,
+               names_to = "year",
+               values_to = "cases")
+
+knitr::kable(tidy_table4a)
+```
+
 
 :::
 
@@ -404,7 +427,25 @@ people <- tribble(
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+The respondent Phillip Woods either erroneously has two ages in the key, or there are two patients named Phillip Woods. Since there is no unique key, pivot wider is unable to pivot two values into one cell. 
+
+```{r}
+
+people2 <- tribble(
+  ~respondent_name,  ~key,    ~value, ~ID,
+  #-----------------|--------|------|-----|
+  "Phillip Woods",   "age",       45, 1,
+  "Phillip Woods",   "height",   186, 1,
+  "Phillip Woods",   "age",       50, 2,
+  "Jessica Cordero", "age",       37, 3,
+  "Jessica Cordero", "height",   156, 3
+)
+
+people2 |> pivot_wider(names_from = key,
+                      values_from = value) |> 
+  knitr::kable()
+```
+
 
 :::
 

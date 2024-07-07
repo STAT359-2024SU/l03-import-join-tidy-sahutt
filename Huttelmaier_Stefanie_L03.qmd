@@ -470,7 +470,34 @@ e) What is one benefit of saving a dataset as an `rds` compared to a `csv`?
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+We use read_csv() to read in `users_top7_2020.csv` because it is a comma separated variable document, and we know it is a tibble since we're using tidyr to read it in. However, we can confirm it is a tibble using is_tibble(). If it was not, we could us the as_tibble() function to convert it. 
+
+Likes and passes tend to follow the same pattern, showing periods of activity for each user. These patterns tend to ebb and flow. Four of the top users used the app throughout 2020, while three of the top users used the app mostly in the first half of the year. Matches tended to remain low, even with large spikes in likes and passes, regardless of the time of year.
+
+Saving as an rds file saves our document as an r object. When we reimport it, the changes we made to month as a dbl data type will remain. 
+```{r}
+#| echo: false
+
+top_user_2020 <- read_csv("data/users_top7_2020.csv")
+
+users_tidy <- top_user_2020 |> 
+  pivot_longer(cols = !user_id,
+               names_to = c("category", "month"),
+               names_sep = "_",
+               values_to = "count")  |> 
+  mutate(month = as.numeric(month))
+
+users_tidy |> 
+  ggplot(aes(x = month, y = count, color = category)) +
+  geom_line() +
+  facet_wrap(~user_id, scales = "free_y") +
+  scale_x_continuous(name ="Month in 2020", 
+                  breaks=c(2, 4, 6, 8, 10, 12)) +
+  labs(y = "Count",
+       title = "Top 7 user behavior by month in 2020")
+
+```
+
 
 :::
 

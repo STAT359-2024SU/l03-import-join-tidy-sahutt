@@ -56,6 +56,7 @@ You should always begin by loading all necessary packages towards the beginning 
 # Loading package(s)
 
 library(tidyverse)
+library(nycflights13)
 
 ```
 
@@ -266,7 +267,13 @@ Describe in your own words what the functions `left_join`, `right_join`, `inner_
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+- left_join() keeps all the rows in the 'left' table, or x. Values from the y table are joined to the x table from the right. Rows that exist in x but not y are given an NA value. 
+
+- right_join() keeps all the rows from the 'right' table, or the y table. Rows that exist in y but not in x are given an NA value. 
+
+- inner_join() only keeps rows that occur in both x and y tables, no NA values are created
+
+-full_join() keeps everything from x and y, NA values are created for rows that exist exclusively in x or y 
 
 :::
 
@@ -280,7 +287,18 @@ Hint: Join the two appropriate datasets together, then determine how weather imp
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+I was expecting wind speed or precipitation to have some impact on departure delay but the most common weather during delays is low visibility. Fog causes delays because it interferes with instrumentation and pilots cannot navigate by sight.
+
+```{r}
+
+flights_weather <- weather |> 
+  left_join(flights)  
+  #by = join_by(origin, year, month, day, hour, time_hour)
+  
+flights_weather |> select(temp:visib, dep_delay)  |> 
+  arrange(desc(dep_delay))
+
+```
 
 :::
 
@@ -315,7 +333,9 @@ data_2023 <- tribble(
 ::: {.callout-tip icon="false"}
 ## Solution
 
-YOUR SOLUTION HERE
+You would use bind row when your observations are different. You are essentially adding more unique observations to your data frame. Columns will bind by name and missing columns will be filled in with an NA. Basically join, but rows instead of columns. 
+
+You should probably never opt for bind_cols over join. If you know all your observations are the same and ordered correctly, it will bind columns together without a key which can make nonsense results. 
 
 :::
 

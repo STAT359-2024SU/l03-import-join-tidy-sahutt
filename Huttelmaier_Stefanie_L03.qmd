@@ -491,7 +491,7 @@ users_tidy |>
   ggplot(aes(x = month, y = count, color = category)) +
   geom_line() +
   facet_wrap(~user_id, scales = "free_y") +
-  scale_x_continuous(name ="Month in 2020", 
+  scale_x_continuous(name ="Month", 
                   breaks=c(2, 4, 6, 8, 10, 12)) +
   labs(y = "Count",
        title = "Top 7 user behavior by month in 2020")
